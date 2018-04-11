@@ -1,2 +1,0 @@
-class VacationType < ApplicationRecord
-end
