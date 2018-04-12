@@ -5,4 +5,5 @@ Rails.application.routes.draw do
   resource :user, only: [:show, :update]
   resources :vacation_requests
   resources :vacation_types
+  resources :settings, only:[:index, :update]
 end

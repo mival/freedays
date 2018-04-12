@@ -1,20 +1,22 @@
 class UserPolicy < ApplicationPolicy
-  class Scope < Scope
-    def resolve
-      if user.admin? || user.supervisor?
-        scope
-      else
-        #scope.where(id: user.id)s
-        scope
-      end
-    end
-  end
-
   def index?
-    true
+    user.admin?
   end
 
   def destroy?
-    !!user
+    user.admin?
   end
+
+  def update?
+    user.admin? || user.id == record.user_id
+  end
+
+  def show?
+    user.admin? || user.id == record.user_id
+  end
+
+  def create?
+    user.admin?
+  end
+
 end

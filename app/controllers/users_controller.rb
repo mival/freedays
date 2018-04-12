@@ -25,24 +25,23 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
-    if @user.update(user_params)
-      render json: @user
-    else
-      render json: @user, status: 422, adapter: :json_api, serializer: ActiveModel::Serializer::ErrorSerializer
-    end
+    @user.update(user_params)
+    render_jsonapi(@user)
   end
 
   def destroy
     authorize User
     @user = User.find(params[:id])
-    unless @user.destroy
-       render json: @user, status: 422, adapter: :json_api, serializer: ActiveModel::Serializer::ErrorSerializer
+    if @user.destroy
+      head(:no_content)
+    else
+      render_jsonapi_errors(@user)
     end
   end
 
   private
 
   def user_params
-    jsonapi_params.slice(:username, :password, :name, :days_left )
+    jsonapi_params.slice(:username, :password, :name, :days_left)
   end
 end

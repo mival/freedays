@@ -17,6 +17,9 @@ class VacationTypesController < ApplicationController
     render_jsonapi(@vacation)
   end
 
+  def delete
+    @vacation = @vacation.find(params[:id])
+  end
   private
 
   def create_params
