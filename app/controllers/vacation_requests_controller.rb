@@ -1,9 +1,10 @@
 class VacationRequestsController < ApplicationController
   def index
-    @vacations = VacationRequest.all
+    @vacations = policy_scope(VacationRequest.all)
     authorize @vacations
-    @vacations = @vacations.accepted if current_user.role =='worker'
+    @vacations = @vacations.by_user(params.dig(:filter, :user)) if params.dig(:filter, :user)
     @vacations = @vacations.status(params.dig(:filter, :status)) if params.dig(:filter, :status) && (current_user.role == 'admin' || current_user.role == 'supervisor')
+    @vacations = @vacations.accepted if current_user.role =='worker'
     render json: @vacations, include: params[:include]
   end
 
@@ -16,7 +17,7 @@ class VacationRequestsController < ApplicationController
     @vacations = VacationRequest.all
     authorize @vacations
     @vacations = @vacations.where(user_id: current_user.id)
-    render json: @vacations
+    render json: @vacations, include: params[:include]
   end
 
   def create

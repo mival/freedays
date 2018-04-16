@@ -5,6 +5,12 @@ class VacationTypesController < ApplicationController
     render json: @vacationtypes
   end
 
+  def show
+    @vacationtype = VacationType.find(params[:id])
+    authorize @vacationtype
+    render json: @vacationtype
+  end
+
   def create
     @vacation = VacationType.new(create_params)
     @vacation.save
