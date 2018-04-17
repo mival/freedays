@@ -4,7 +4,7 @@ class VacationRequestsController < ApplicationController
     authorize @vacations
     @vacations = @vacations.by_user(params.dig(:filter, :user)) if params.dig(:filter, :user)
     @vacations = @vacations.status(params.dig(:filter, :status)) if params.dig(:filter, :status) && (current_user.role == 'admin' || current_user.role == 'supervisor')
-    @vacations = @vacations.accepted if current_user.role =='worker'
+    @vacations = @vacations.accepted if current_user.role =='worker' && !params.dig(:filter, :user)
     render json: @vacations, include: params[:include]
   end
 
@@ -13,12 +13,12 @@ class VacationRequestsController < ApplicationController
     render json: @vacations
   end
 
-  def my_vacations
-    @vacations = VacationRequest.all
-    authorize @vacations
-    @vacations = @vacations.where(user_id: current_user.id)
-    render json: @vacations, include: params[:include]
-  end
+  # def my_vacations
+  #   @vacations = VacationRequest.all
+  #   authorize @vacations
+  #   @vacations = @vacations.where(user_id: current_user.id)
+  #   render json: @vacations, include: params[:include]
+  # end
 
   def create
     @vacation =  VacationRequest.new(vacation_params)

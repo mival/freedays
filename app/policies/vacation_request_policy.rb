@@ -29,7 +29,7 @@ class VacationRequestPolicy < ApplicationPolicy
       if user.admin?
         scope
       else
-        scope.where(accepted: true)
+        scope
       end
     end
   end

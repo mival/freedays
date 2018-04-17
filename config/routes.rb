@@ -6,4 +6,5 @@ Rails.application.routes.draw do
   resources :vacation_requests
   resources :vacation_types
   resources :settings, only:[:index, :update]
+  resources :documents
 end
