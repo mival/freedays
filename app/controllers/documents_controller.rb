@@ -1,12 +1,21 @@
 class DocumentsController < ApplicationController
-  def index
-    @documents = Document.all
-    render json: @documents
-  end
+
   def create
     @document = Document.new(document_params)
     @document.save()
-    render json: @document
+    render_jsonapi(@document)
+  end
+
+  def update
+    @document = Document.find(params[:id])
+    @document.update(document_params)
+    render_jsonapi(@document)
+  end
+
+  def destroy
+    @document = Document.find(params[:id])
+    @document.destroy
+    render_jsonapi(@udocument)
   end
 
   private
