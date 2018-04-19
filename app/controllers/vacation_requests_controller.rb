@@ -21,8 +21,9 @@ class VacationRequestsController < ApplicationController
   # end
 
   def create
-    @vacation =  VacationRequest.new(vacation_params)
+    @vacation =  VacationRequest.new(create_params)
     @vacation.user ||= current_user
+    @vacation.accepted = nil
     authorize @vacation
     @vacation.save
     render_jsonapi(@vacation)
@@ -53,5 +54,9 @@ class VacationRequestsController < ApplicationController
 
   def vacation_params
     jsonapi_params.slice(:start_day, :end_day, :accepted, :user_id, :vacation_type_id)
+  end
+
+  def create_params
+    jsonapi_params.slice(:start_day, :end_day, :user_id, :vacation_type_id)
   end
 end

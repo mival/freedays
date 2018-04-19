@@ -42,6 +42,6 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    jsonapi_params.slice(:username, :password, :name, :days_left)
+    jsonapi_params.slice(:username, :password, :role, :name, :surname, :phone, :email, :days_left)
   end
 end

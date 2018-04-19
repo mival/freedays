@@ -3,8 +3,10 @@ class User < ApplicationRecord
 
   enum role:[:worker, :supervisor, :admin]
   store_accessor :profile, :name
+  store_accessor :profile, :surname
+  store_accessor :profile, :phone
+  store_accessor :profile, :email
   store_accessor :profile, :days_left
-
   scope :username_start, ->(username){ where username: username }
 
   #has_many :vacation_requests # important

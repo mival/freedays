@@ -1,4 +1,8 @@
 class DocumentsController < ApplicationController
+  def index
+    @document = Document.all
+    render json: @document
+  end
 
   def create
     @document = Document.new(document_params)
@@ -21,6 +25,6 @@ class DocumentsController < ApplicationController
   private
 
   def document_params
-    jsonapi_params.slice(:file)
+    jsonapi_params.slice(:file_data, :url)
   end
 end

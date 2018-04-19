@@ -11,3 +11,5 @@ Shrine.storages = {
     cache: Shrine::Storage::Cloudinary.new(prefix: "cache", resource_type: "raw"), # for direct uploads
     store: Shrine::Storage::Cloudinary.new(prefix: "store", resource_type: "raw"),
 }
+
+Shrine.plugin :presign_endpoint
