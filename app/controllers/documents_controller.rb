@@ -1,6 +1,6 @@
 class DocumentsController < ApplicationController
   def index
-    @document = Document.all
+    @document = Document.all.url
     render json: @document
   end
 

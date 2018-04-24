@@ -10,7 +10,7 @@ class VacationRequestsController < ApplicationController
 
   def show
     @vacations = VacationRequest.find(params[:id])
-    render json: @vacations
+    render json: @vacations, include: [:documents]
   end
 
   # def my_vacations
@@ -57,6 +57,6 @@ class VacationRequestsController < ApplicationController
   end
 
   def create_params
-    jsonapi_params.slice(:start_day, :end_day, :user_id, :vacation_type_id)
+    jsonapi_params.slice(:start_day, :end_day, :user_id, :vacation_type_id, :document_ids)
   end
 end

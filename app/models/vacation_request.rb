@@ -5,6 +5,5 @@ class VacationRequest < ApplicationRecord
   scope :by_user, ->(user){where user_id: user}
   belongs_to :user
   belongs_to :vacation_type
-
   has_many :documents, as: :attachable
 end
