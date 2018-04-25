@@ -23,15 +23,4 @@ class VacationRequestPolicy < ApplicationPolicy
   def my_vacations?
     !!user
   end
-
-  class Scope < Scope
-    def resolve
-      if user.admin?
-        scope
-      else
-        scope
-      end
-    end
-  end
-
 end

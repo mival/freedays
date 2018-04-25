@@ -19,13 +19,15 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    @user.save
+    if @user.save
+      UserMailer.with(user: @user).welcome_email.deliver_later
+    end
     render_jsonapi(@user) # important
   end
 
   def update
     @user = User.find(params[:id])
-    @user.update(user_params)
+    @user.update(update_params)
     render_jsonapi(@user)
   end
 
@@ -43,5 +45,9 @@ class UsersController < ApplicationController
 
   def user_params
     jsonapi_params.slice(:username, :password, :role, :name, :surname, :phone, :email, :days_left)
+  end
+
+  def update_params
+    jsonapi_params.slice(:username, :role, :name, :surname, :phone, :email, :days_left)
   end
 end

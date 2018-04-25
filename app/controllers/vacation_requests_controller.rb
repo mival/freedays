@@ -1,10 +1,12 @@
 class VacationRequestsController < ApplicationController
+
   def index
     @vacations = policy_scope(VacationRequest.all)
     authorize @vacations
     @vacations = @vacations.by_user(params.dig(:filter, :user)) if params.dig(:filter, :user)
     @vacations = @vacations.status(params.dig(:filter, :status)) if params.dig(:filter, :status) && (current_user.role == 'admin' || current_user.role == 'supervisor')
-    @vacations = @vacations.accepted if current_user.role =='worker' && !params.dig(:filter, :user)
+    @vacations = @vacations.calendar(params.dig(:filter, :calendar)) if params.dig(:filter, :calendar)
+    @vacations = @vacations.date_range(params.dig(:filter, :start_date), params.dig(:filter, :end_date)) if params.dig(:filter, :start_date) && params.dig(:filter, :end_date)
     render json: @vacations, include: params[:include]
   end
 
@@ -12,13 +14,6 @@ class VacationRequestsController < ApplicationController
     @vacations = VacationRequest.find(params[:id])
     render json: @vacations, include: [:documents]
   end
-
-  # def my_vacations
-  #   @vacations = VacationRequest.all
-  #   authorize @vacations
-  #   @vacations = @vacations.where(user_id: current_user.id)
-  #   render json: @vacations, include: params[:include]
-  # end
 
   def create
     @vacation =  VacationRequest.new(create_params)
@@ -36,7 +31,10 @@ class VacationRequestsController < ApplicationController
     if current_user.role == 'worker'
       params['accepted'] = nil
     end
-    @vacation.update(params)
+    @user = User.find(@vacation.user_id)
+    if @vacation.update(params)
+      VacationRequestMailer.with(vacation_request: @vacation, user: @user).change_status.deliver_later
+    end
     render_jsonapi(@vacation)
   end
 
