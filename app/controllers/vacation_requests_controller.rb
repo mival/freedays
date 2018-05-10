@@ -33,7 +33,7 @@ class VacationRequestsController < ApplicationController
     end
     @user = User.find(@vacation.user_id)
     if @vacation.update(params)
-      VacationRequestMailer.with(vacation_request: @vacation, user: @user).change_status.deliver_later
+      #VacationRequestMailer.with(vacation_request: @vacation, user: @user).change_status.deliver_later
     end
     render_jsonapi(@vacation)
   end

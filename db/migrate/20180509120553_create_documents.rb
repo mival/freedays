@@ -4,6 +4,7 @@ class CreateDocuments < ActiveRecord::Migration[5.1]
       t.references :attachable, polymorphic: true
       t.jsonb :file_data
       t.string :url
+      t.string :extension
     end
   end
 end

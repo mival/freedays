@@ -8,6 +8,7 @@ class User < ApplicationRecord
   store_accessor :profile, :email
   store_accessor :profile, :days_left
   scope :username_start, ->(username){ where username: username }
+  has_many :vacation_requests, dependent: :delete_all
 
   def generate_password_token!
     self.reset_password_token = generate_token

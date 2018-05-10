@@ -25,6 +25,6 @@ class DocumentsController < ApplicationController
   private
 
   def document_params
-    jsonapi_params.slice(:file_data, :url)
+    jsonapi_params.slice(:file_data, :url, :extension)
   end
 end
