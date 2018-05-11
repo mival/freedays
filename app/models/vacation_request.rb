@@ -2,7 +2,7 @@ class VacationRequest < ApplicationRecord
   scope :calendar, -> (_){where accepted: true}
   scope :pendent, ->(status) {where accepted: nil}
   scope :status, ->(status) {status = ActiveRecord::Type::Boolean.new.cast(status); where accepted: status}
-  scope :by_user, ->(user){where user_id: user}
+  scope :by_user, ->(user){where user_id: user; order('start_day')}
   scope :accepted, -> {where accepted: true}
   scope :date_range, -> (start_date, end_date) {where('(start_day, end_day) OVERLAPS (?, ?)', start_date, end_date)}
   belongs_to :user
