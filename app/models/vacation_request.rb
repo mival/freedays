@@ -8,4 +8,8 @@ class VacationRequest < ApplicationRecord
   belongs_to :user
   belongs_to :vacation_type
   has_many :documents, as: :attachable
+
+  def business_days
+    start_day.business_dates_until(end_day).count
+  end
 end

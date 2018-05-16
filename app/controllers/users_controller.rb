@@ -42,12 +42,11 @@ class UsersController < ApplicationController
   end
 
   private
-
   def user_params
-    jsonapi_params.slice(:username, :password, :role, :name, :surname, :phone, :email, :days_left)
+    jsonapi_params.slice(:username, :password, :role, :name, :surname, :phone, :email, :total_days, :language)
   end
 
   def update_params
-    jsonapi_params.slice(:username, :role, :name, :surname, :phone, :email, :days_left)
+    jsonapi_params.slice(:username, :role, :name, :surname, :phone, :email, :total_days, :language)
   end
 end

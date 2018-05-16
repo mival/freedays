@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   get 'my_vacations', to: 'vacation_requests#my_vacations'
   post 'password/forgot', to: 'password#forgot'
   post 'password/reset', to: 'password#reset'
+  get 'users/remaining_days/:id', to: 'users#remaining_days'
   resources :users
   resource :user, only: [:show, :update]
   resources :vacation_requests

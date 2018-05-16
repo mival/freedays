@@ -6,7 +6,8 @@ class User < ApplicationRecord
   store_accessor :profile, :surname
   store_accessor :profile, :phone
   store_accessor :profile, :email
-  store_accessor :profile, :days_left
+  store_accessor :profile, :total_days
+  store_accessor :profile, :language
   scope :username_start, ->(username){ where username: username }
   has_many :vacation_requests, dependent: :delete_all
 
@@ -25,6 +26,12 @@ class User < ApplicationRecord
     self.password = password
     save!
   end
+
+  def remaining_days
+    (total_days.to_i - vacation_requests.sum(&:business_days)).to_i
+  end
+
+
 
   private
 

@@ -6,6 +6,8 @@ class CreateVacationRequests < ActiveRecord::Migration[5.1]
       t.boolean :accepted, default: nil
       t.references :user # t.integer :user_id, foreign_key: { primary_key: :id2}, index: true // Important
       t.references :vacation_type
+      t.text :acceptance_note
+      t.text :request_note
     end
   end
 end

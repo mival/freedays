@@ -32,7 +32,7 @@ class VacationRequestsController < ApplicationController
       params['accepted'] = nil
     end
     @user = User.find(@vacation.user_id)
-    if @vacation.update(params)
+    if @vacation.update(params) && @user.save()
       #VacationRequestMailer.with(vacation_request: @vacation, user: @user).change_status.deliver_later
     end
     render_jsonapi(@vacation)
@@ -51,7 +51,7 @@ class VacationRequestsController < ApplicationController
   private
 
   def vacation_params
-    jsonapi_params.slice(:start_day, :end_day, :accepted, :user_id, :vacation_type_id)
+    jsonapi_params.slice(:start_day, :end_day, :accepted, :user_id, :vacation_type_id, :total_days)
   end
 
   def create_params

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180509120553) do
+ActiveRecord::Schema.define(version: 20180516125100) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,6 +48,8 @@ ActiveRecord::Schema.define(version: 20180509120553) do
     t.boolean "accepted"
     t.bigint "user_id"
     t.bigint "vacation_type_id"
+    t.text "acceptance_note"
+    t.text "request_note"
     t.index ["user_id"], name: "index_vacation_requests_on_user_id"
     t.index ["vacation_type_id"], name: "index_vacation_requests_on_vacation_type_id"
   end
