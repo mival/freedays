@@ -17,8 +17,12 @@ class VacationRequestsController < ApplicationController
 
   def create
     @vacation =  VacationRequest.new(create_params)
-    @vacation.user ||= current_user
-    @vacation.accepted = nil
+    if current_user.role == 'worker'
+      @vacation.user = current_user
+      @vacation.accepted = nil
+    else
+      @vacation.accepted = true
+    end
     authorize @vacation
     @vacation.save
     render_jsonapi(@vacation)
@@ -31,14 +35,14 @@ class VacationRequestsController < ApplicationController
     if current_user.role == 'worker'
       params['accepted'] = nil
     end
-    @user = User.find(@vacation.user_id)
-    if @vacation.update(params) && @user.save()
+    if @vacation.update(params)
       #VacationRequestMailer.with(vacation_request: @vacation, user: @user).change_status.deliver_later
+      notification(@vacation)
     end
     render_jsonapi(@vacation)
   end
 
-  def destroy
+  def destroy0
     @vacation = VacationRequest.find(params[:id])
     authorize @vacation
     if @vacation.destroy
@@ -56,5 +60,22 @@ class VacationRequestsController < ApplicationController
 
   def create_params
     jsonapi_params.slice(:start_day, :end_day, :user_id, :vacation_type_id, :document_ids)
+  end
+
+  def notification(vacation)
+    device_token = User.find(vacation.user_id).push_token
+    payload = {
+        to: device_token,
+        data: {
+          title: "New vacation request",
+          body: "What do you want to do?",
+          vacation_id: vacation.id,
+          actions: [
+              { "icon": "emailGuests", "title": "Accept", "callback": "acceptRequest", "foreground": true},
+              { "icon": "snooze", "title": "Deny", "callback": "denyRequest", "foreground": false}
+          ],
+        }
+    }
+    Pusher.push(payload)
   end
 end

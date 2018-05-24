@@ -10,6 +10,6 @@ class VacationRequest < ApplicationRecord
   has_many :documents, as: :attachable
 
   def business_days
-    start_day.business_dates_until(end_day).count
+     start_day.business_dates_until(end_day).count+1
   end
 end

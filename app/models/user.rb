@@ -8,8 +8,11 @@ class User < ApplicationRecord
   store_accessor :profile, :email
   store_accessor :profile, :total_days
   store_accessor :profile, :language
+  store_accessor :profile, :push_token
   scope :username_start, ->(username){ where username: username }
   has_many :vacation_requests, dependent: :delete_all
+
+  default_value_for :total_days, 30
 
   def generate_password_token!
     self.reset_password_token = generate_token
@@ -28,7 +31,7 @@ class User < ApplicationRecord
   end
 
   def remaining_days
-    (total_days.to_i - vacation_requests.sum(&:business_days)).to_i
+    (total_days.to_i - vacation_requests.where(accepted: true).sum(&:business_days)).to_i
   end
 
 
